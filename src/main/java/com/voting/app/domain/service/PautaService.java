@@ -7,4 +7,6 @@ public interface PautaService {
     Pauta create(Pauta pauta);
 
     void open(Long id, Integer duracao);
+
+    void votar(Long id, String idAssociado, String valorVoto);
 }

@@ -29,12 +29,38 @@ public class PautaServiceImpl implements PautaService {
     }
 
     @Override
+    @Transactional
     public void open(Long id, Integer duracao) {
-        Pauta pauta = pautaRepository.findById(id).orElseThrow(RuntimeException::new);
+        Pauta pauta = findById(id);
         LocalDateTime dataFechamento = nonNull(duracao) ? getDataFechamento(duracao) : getDataFechamento(1);
 
         pauta.setDataFechamento(dataFechamento);
         pautaRepository.save(pauta);
+    }
+
+    @Override
+    @Transactional
+    public void votar(Long id, String idAssociado, String valorVoto) {
+        Pauta pauta = findById(id);
+
+        // Se o associado pode votar
+        if (pauta.addVoto(idAssociado)) {
+
+            if ("Sim".trim().equalsIgnoreCase(valorVoto)) {
+                Integer votosSim = pauta.getVotoSim() + 1;
+                pauta.setVotoSim(votosSim);
+            } else {
+                // Todos os votos diferentes de sim serão considerados como não
+                Integer votosNao = pauta.getVotoNao() + 1;
+                pauta.setVotoNao(votosNao);
+            }
+
+            pautaRepository.save(pauta);
+        }
+    }
+
+    private Pauta findById(Long id) {
+        return pautaRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     private LocalDateTime getDataFechamento(Integer duracao) {
