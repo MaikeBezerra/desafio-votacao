@@ -44,7 +44,7 @@ public class PautaServiceImpl implements PautaService {
         Pauta pauta = findById(id);
 
         // Se o associado pode votar
-        if (pauta.addVoto(idAssociado)) {
+        if (isValidToVote(pauta, idAssociado)) {
 
             if ("Sim".trim().equalsIgnoreCase(valorVoto)) {
                 Integer votosSim = pauta.getVotoSim() + 1;
@@ -65,6 +65,13 @@ public class PautaServiceImpl implements PautaService {
 
     private LocalDateTime getDataFechamento(Integer duracao) {
         return LocalDateTime.of(LocalDate.now(), LocalTime.now().plusMinutes(duracao).withNano(0));
+    }
+
+    private boolean isValidToVote(Pauta pauta, String idAssociado) {
+        // Validação de data fechamento nula previne uma chamada de voto sem que a pauta esteja aberta
+        // Valida se a pauta está aberta para votação e o associado ainda não votou
+        return nonNull(pauta.getDataFechamento()) &&
+                pauta.getDataFechamento().isAfter(LocalDateTime.now()) && pauta.addVoto(idAssociado);
     }
 
 }

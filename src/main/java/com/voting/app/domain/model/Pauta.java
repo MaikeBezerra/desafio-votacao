@@ -46,6 +46,7 @@ public class Pauta {
     private Integer votoNao;
 
     // Guarda a lista de CPF dos associados votantes
+    // Em uma solução mais complexa poderiamos considerar uma Lista de objetos reperesentando os associados
     @ElementCollection
     @CollectionTable(name = "pauta_associados", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "idAssociado")
