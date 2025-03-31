@@ -1,17 +1,13 @@
 package com.voting.app.api;
 
+import com.voting.app.api.assembler.PautaModelAssembler;
+import com.voting.app.api.model.ResultadoModel;
 import com.voting.app.domain.model.Pauta;
 import com.voting.app.domain.service.PautaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pautas")
@@ -19,9 +15,12 @@ public class PautaController {
 
     private final PautaService pautaService;
 
+    private final PautaModelAssembler pautaModelAssembler;
+
     @Autowired
-    public PautaController(PautaService pautaService) {
+    public PautaController(PautaService pautaService, PautaModelAssembler pautaModelAssembler) {
         this.pautaService = pautaService;
+        this.pautaModelAssembler = pautaModelAssembler;
     }
 
     @PostMapping
@@ -40,5 +39,10 @@ public class PautaController {
         pautaService.votar(id, idAssociado, valorVoto);
     }
 
+    @GetMapping("/resultado")
+    public ResponseEntity<ResultadoModel> gerarResultado(@RequestParam Long id) {
+        Pauta pauta = pautaService.findById(id);
 
+        return ResponseEntity.ok(pautaModelAssembler.toResultadoModel(pauta));
+    }
 }

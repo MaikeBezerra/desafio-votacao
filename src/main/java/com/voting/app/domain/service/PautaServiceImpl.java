@@ -59,7 +59,7 @@ public class PautaServiceImpl implements PautaService {
         }
     }
 
-    private Pauta findById(Long id) {
+    public Pauta findById(Long id) {
         return pautaRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 

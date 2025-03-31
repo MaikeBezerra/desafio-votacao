@@ -9,4 +9,6 @@ public interface PautaService {
     void open(Long id, Integer duracao);
 
     void votar(Long id, String idAssociado, String valorVoto);
+
+    Pauta findById(Long id);
 }
