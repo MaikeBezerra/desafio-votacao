@@ -1,39 +1,20 @@
 package com.voting.app.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class ResultadoModel {
 
-    @JsonProperty("sessaoId")
+    @JsonProperty("pauta_codigo")
     private Long id;
 
-    @JsonProperty("Sim")
+    @JsonProperty("total_sim")
     private Integer votoSim;
 
-    @JsonProperty("Nao")
+    @JsonProperty("total_nao")
     private Integer votoNao;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getVotoSim() {
-        return votoSim;
-    }
-
-    public void setVotoSim(Integer votoSim) {
-        this.votoSim = votoSim;
-    }
-
-    public Integer getVotoNao() {
-        return votoNao;
-    }
-
-    public void setVotoNao(Integer votoNao) {
-        this.votoNao = votoNao;
-    }
 }

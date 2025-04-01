@@ -1,6 +1,9 @@
 package com.voting.app.api;
 
 import com.voting.app.api.assembler.PautaModelAssembler;
+import com.voting.app.api.model.PautaModel;
+import com.voting.app.api.model.input.PautaAberturaInput;
+import com.voting.app.api.model.input.PautaVotoInput;
 import com.voting.app.api.model.ResultadoModel;
 import com.voting.app.domain.model.Pauta;
 import com.voting.app.domain.service.PautaService;
@@ -25,22 +28,24 @@ public class PautaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pauta create(@RequestBody Pauta pauta) {
-        return this.pautaService.create(pauta);
+    public PautaModel create(@RequestBody Pauta pauta) {
+        return pautaModelAssembler.toPautaModel(this.pautaService.create(pauta));
     }
 
-    @PutMapping("/abrir")
-    public void abrirPauta(@RequestParam Long id, @RequestParam(required = false) Integer duracao) {
-        pautaService.open(id, duracao);
+    @PutMapping("/{pautaId}/abrir")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void abrirPauta(@PathVariable(value = "pautaId") Long id, @RequestBody(required = false) PautaAberturaInput aberturaInput) {
+        pautaService.open(id, aberturaInput == null ? null : aberturaInput.getDuracao());
     }
 
-    @PatchMapping("/votar")
-    public void votar(@RequestParam Long id, @RequestParam String idAssociado, @RequestParam String valorVoto) {
-        pautaService.votar(id, idAssociado, valorVoto);
+    @PutMapping("/{pautaId}/votar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void votar(@PathVariable(value = "pautaId") Long id, @RequestBody PautaVotoInput votoInput) {
+        pautaService.votar(id, votoInput.getIdAssociado(), votoInput.getValorVoto());
     }
 
-    @GetMapping("/resultado")
-    public ResponseEntity<ResultadoModel> gerarResultado(@RequestParam Long id) {
+    @GetMapping("/{pautaId}/resultado")
+    public ResponseEntity<ResultadoModel> gerarResultado(@PathVariable("pautaId") Long id) {
         Pauta pauta = pautaService.findById(id);
 
         return ResponseEntity.ok(pautaModelAssembler.toResultadoModel(pauta));

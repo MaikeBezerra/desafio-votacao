@@ -1,5 +1,6 @@
 package com.voting.app.domain.service;
 
+import com.voting.app.domain.exception.*;
 import com.voting.app.domain.model.Pauta;
 import com.voting.app.domain.repository.PautaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -56,11 +58,14 @@ public class PautaServiceImpl implements PautaService {
             }
 
             pautaRepository.save(pauta);
+        } else {
+            throw new AssociadoJaVotouException(
+                    String.format("Associado com código %s já votou para a pauta de código %d", idAssociado, id));
         }
     }
 
     public Pauta findById(Long id) {
-        return pautaRepository.findById(id).orElseThrow(RuntimeException::new);
+        return pautaRepository.findById(id).orElseThrow(() -> new PautaNaoEncontradaException(id));
     }
 
     private LocalDateTime getDataFechamento(Integer duracao) {
@@ -68,10 +73,18 @@ public class PautaServiceImpl implements PautaService {
     }
 
     private boolean isValidToVote(Pauta pauta, String idAssociado) {
-        // Validação de data fechamento nula previne uma chamada de voto sem que a pauta esteja aberta
-        // Valida se a pauta está aberta para votação e o associado ainda não votou
-        return nonNull(pauta.getDataFechamento()) &&
-                pauta.getDataFechamento().isAfter(LocalDateTime.now()) && pauta.addVoto(idAssociado);
+        // Valida se uma pauta está aberta
+        if (isNull(pauta.getDataFechamento())) {
+            throw new PautaNaoAbertaException(pauta.getId());
+        }
+
+        // Valida se uma pauta expirou seu tempo de votação
+        if (pauta.getDataFechamento().isBefore(LocalDateTime.now())) {
+            throw new PautaFechadaException(pauta.getId());
+        }
+
+        // Valida se o associado ainda não votou
+        return pauta.addVoto(idAssociado);
     }
 
 }
