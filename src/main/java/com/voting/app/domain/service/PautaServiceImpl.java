@@ -45,7 +45,7 @@ public class PautaServiceImpl implements PautaService {
     public void votar(Long id, String idAssociado, String valorVoto) {
         Pauta pauta = findById(id);
 
-        // Se o associado pode votar
+        // valida se o associado pode votar
         if (isValidToVote(pauta, idAssociado)) {
 
             if ("Sim".trim().equalsIgnoreCase(valorVoto)) {
