@@ -55,6 +55,11 @@ Exemplos de retorno do serviço
 ### Tarefa Bônus 3 - Versionamento da API
 
 ○ Como você versionaria a API da sua aplicação? Que estratégia usar?
+Usaria versionamento por url exemplo dominio/v1/path onde v1 indica a versão da Api.
+Para a estretagia iria depender se fosse mudar a linguagem ou versão do framework
+por exemplo a v1 foi desenvolvida em java mas a versão dois por alguma proposito precisa
+ser desenvolvida em python, logo se criaria um novo projeto. Caso contrario eu manteria
+o mesmo projeto um novo controller para toda a camada da V2.
 
 ## O que será analisado
 
