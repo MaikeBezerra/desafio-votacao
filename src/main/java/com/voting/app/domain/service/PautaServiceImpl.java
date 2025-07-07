@@ -1,9 +1,12 @@
 package com.voting.app.domain.service;
 
-import com.voting.app.domain.exception.*;
+import com.voting.app.domain.exception.AssociadoJaVotouException;
+import com.voting.app.domain.exception.PautaFechadaException;
+import com.voting.app.domain.exception.PautaNaoAbertaException;
+import com.voting.app.domain.exception.PautaNaoEncontradaException;
 import com.voting.app.domain.model.Pauta;
 import com.voting.app.domain.repository.PautaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +18,10 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
+@RequiredArgsConstructor
 public class PautaServiceImpl implements PautaService {
 
     private final PautaRepository pautaRepository;
-
-    @Autowired
-    public PautaServiceImpl(PautaRepository pautaRepository) {
-        this.pautaRepository = pautaRepository;
-    }
 
     @Override
     @Transactional

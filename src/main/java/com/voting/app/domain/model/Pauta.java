@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,6 +20,8 @@ import java.util.Set;
 import static java.util.Objects.isNull;
 
 @Entity
+@Getter
+@Setter
 public class Pauta {
 
     @Id
@@ -51,62 +55,6 @@ public class Pauta {
     @CollectionTable(name = "pauta_associados", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "idAssociado")
     private Set<String> associados;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCampo1() {
-        return campo1;
-    }
-
-    public void setCampo1(String campo1) {
-        this.campo1 = campo1;
-    }
-
-    public Integer getCampo2() {
-        return campo2;
-    }
-
-    public void setCampo2(Integer campo2) {
-        this.campo2 = campo2;
-    }
-
-    public String getIdCampoTexto() {
-        return idCampoTexto;
-    }
-
-    public void setIdCampoTexto(String idCampoTexto) {
-        this.idCampoTexto = idCampoTexto;
-    }
-
-    public Integer getIdCampoNumerico() {
-        return idCampoNumerico;
-    }
-
-    public void setIdCampoNumerico(Integer idCampoNumerico) {
-        this.idCampoNumerico = idCampoNumerico;
-    }
-
-    public LocalDate getIdCampoData() {
-        return idCampoData;
-    }
-
-    public void setIdCampoData(LocalDate idCampoData) {
-        this.idCampoData = idCampoData;
-    }
-
-    public LocalDateTime getDataFechamento() {
-        return dataFechamento;
-    }
-
-    public void setDataFechamento(LocalDateTime dataFechamento) {
-        this.dataFechamento = dataFechamento;
-    }
 
     public Integer getVotoSim() {
         // Evitar null pointer, outra solução seria criar a tabela com valor default 0

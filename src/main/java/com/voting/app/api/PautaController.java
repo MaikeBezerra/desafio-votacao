@@ -7,24 +7,19 @@ import com.voting.app.api.model.input.PautaVotoInput;
 import com.voting.app.api.model.ResultadoModel;
 import com.voting.app.domain.model.Pauta;
 import com.voting.app.domain.service.PautaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pautas")
+@RequiredArgsConstructor
 public class PautaController {
 
     private final PautaService pautaService;
 
     private final PautaModelAssembler pautaModelAssembler;
-
-    @Autowired
-    public PautaController(PautaService pautaService, PautaModelAssembler pautaModelAssembler) {
-        this.pautaService = pautaService;
-        this.pautaModelAssembler = pautaModelAssembler;
-    }
 
     /**
      * Cadastro de uma pauta
